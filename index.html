@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>ワートリ好き顔メーカー</title>
-  <meta name="description" content="ワールドトリガーの好きな顔を選んで、自分だけの好き顔9選を作ろう。">
+  <meta name="description" content="ワールドトリガーの好きな顔を100回選んで、自分だけの好き顔9選を作ろう。">
 
   <link rel="stylesheet" href="css/style.css">
 
@@ -19,16 +19,16 @@
   <header class="site-header">
     <p class="eyebrow">MY FAVORITE FACES</p>
     <h1>ワートリ好き顔メーカー</h1>
-    <p>好きな顔を選んで、自分だけの好き顔9選を作ろう。</p>
+    <p>好きな顔を100回選んで、自分だけの好き顔9選を作ろう。</p>
   </header>
 
   <main class="container">
-
     <section id="duel-mode" class="panel">
       <h2>ワートリ好き顔メーカー</h2>
       <p class="subtext">
         四択・三択・二択を合計100回！
-        直感で好きな人を選んで、自分だけの好き顔9選を作ろう。
+        直感で好きな人を1人ずつ選んでね。
+        選んだポイントを集計して、上位9人を決定するよ。
       </p>
 
       <div class="duel-progress">
@@ -57,38 +57,7 @@
           class="button primary"
           disabled
         >
-          診断結果から候補を選ぶ
-        </button>
-      </div>
-    </section>
-
-    <section id="candidate-mode" class="panel" hidden>
-      <h2>好き顔9選の候補</h2>
-      <p class="subtext">
-        診断結果をもとに候補を選んだよ。
-        好きな9人を選んで、自分だけの好き顔9選を完成させよう。
-      </p>
-
-      <div id="candidate-list" class="member-list"></div>
-
-      <p id="candidate-count" class="message" aria-live="polite"></p>
-
-      <div class="button-row">
-        <button
-          id="candidate-back-button"
-          type="button"
-          class="button secondary"
-        >
-          診断結果に戻る
-        </button>
-
-        <button
-          id="candidate-result-button"
-          type="button"
-          class="button primary"
-          disabled
-        >
-          9人で結果を作る
+          結果を見る
         </button>
       </div>
     </section>
@@ -97,7 +66,7 @@
       <div id="result-capture">
         <p class="eyebrow">MY TOP 9</p>
         <h2>わたしの好き顔9選</h2>
-        <p id="result-subtitle" class="subtext">My favorite faces</p>
+        <p id="result-subtitle" class="subtext">ワートリ好き顔メーカー</p>
 
         <div id="result-grid" class="result-grid"></div>
 
@@ -110,7 +79,7 @@
           type="button"
           class="button secondary"
         >
-          順位を調整する
+          診断結果に戻る
         </button>
 
         <button
@@ -132,7 +101,6 @@
 
       <p id="result-message" class="message" aria-live="polite"></p>
     </section>
-
   </main>
 
   <footer class="site-footer">
