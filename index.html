@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>好き顔9選メーカー</title>
+  <meta name="description" content="好きな人を選んで自分だけの好き顔9選を作ろう。">
+
+  <!-- デザイン：css/style.css -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- defer によりHTMLの読み込み後に実行 -->
+  <script src="js/members.js" defer></script>
+  <script src="js/app.js" defer></script>
+
+  <!-- 画像保存用ライブラリ。インターネット接続が必要 -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+    defer
+  ></script>
+</head>
+<body>
+  <header class="site-header">
+    <p class="eyebrow">MY FAVORITE FACES</p>
+    <h1>好き顔9選メーカー</h1>
+    <p>好きな顔を集めて、自分だけの9選を作ろう。</p>
+  </header>
+
+  <main class="container">
+    <!-- モード切替 -->
+    <nav class="mode-switch" aria-label="作成方法">
+      <button type="button" class="mode-button active"
+        data-mode="list" aria-pressed="true">
+        一覧から選ぶ
+      </button>
+      <button type="button" class="mode-button"
+        data-mode="duel" aria-pressed="false">
+        二択で診断
+      </button>
+    </nav>
+
+    <!-- 一覧選択モード -->
+    <section id="list-mode" class="panel">
+      <div class="section-heading">
+        <h2>メンバーを選ぶ</h2>
+        <span id="selection-count">0 / 9人</span>
+      </div>
+
+      <label for="group-filter">グループで絞り込む</label>
+      <select id="group-filter">
+        <option value="all">すべて</option>
+      </select>
+
+      <label for="member-search">名前で検索</label>
+      <input id="member-search" type="search"
+        placeholder="名前を入力…" autocomplete="off">
+
+      <div id="member-list" class="member-list"></div>
+      <p id="list-message" class="message" aria-live="polite">
+        9人を選んでね。選んだ順に順位がつきます。
+      </p>
+
+      <div class="button-row">
+        <button id="clear-button" class="button secondary">
+          選択をリセット
+        </button>
+        <button id="list-result-button" class="button primary" disabled>
+          結果を見る
+        </button>
+      </div>
+    </section>
+
+    <!-- 二択診断モード -->
+    <section id="duel-mode" class="panel" hidden>
+      <h2>どちらの顔が好き？</h2>
+      <p class="subtext">
+        直感で選んでね。比較を重ねると候補が絞られていきます。
+      </p>
+
+      <div class="duel-progress">
+        <span id="duel-progress-text">比較 0 / 36</span>
+        <div class="progress-track">
+          <div id="duel-progress-bar" class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div id="duel-cards" class="duel-cards"></div>
+
+      <p id="duel-message" class="message" aria-live="polite"></p>
+
+      <div class="button-row">
+        <button id="duel-restart-button" class="button secondary">
+          診断をやり直す
+        </button>
+        <button id="duel-finish-button" class="button primary" disabled>
+          9人の候補を確定する
+        </button>
+      </div>
+    </section>
+
+    <!-- 診断候補の選択 -->
+    <section id="candidate-mode" class="panel" hidden>
+      <h2>好き顔9選の候補</h2>
+      <p class="subtext">
+        診断結果から候補を選んでいます。
+        好きな9人に調整してから結果へ進んでね。
+      </p>
+
+      <div id="candidate-list" class="member-list"></div>
+      <p id="candidate-count" class="message" aria-live="polite"></p>
+
+      <div class="button-row">
+        <button id="candidate-back-button" class="button secondary">
+          診断に戻る
+        </button>
+        <button id="candidate-result-button" class="button primary" disabled>
+          9人で結果を作る
+        </button>
+      </div>
+    </section>
+
+    <!-- 結果 -->
+    <section id="result-section" class="panel result-panel" hidden>
+      <div id="result-capture">
+        <p class="eyebrow">MY TOP 9</p>
+        <h2>わたしの好き顔9選</h2>
+        <p id="result-subtitle" class="subtext">
+          My favorite faces
+        </p>
+        <div id="result-grid" class="result-grid"></div>
+        <p class="result-credit">MY FAVORITE FACES</p>
+      </div>
+
+      <div class="button-row">
+        <button id="edit-result-button" class="button secondary">
+          順位を調整する
+        </button>
+        <button id="copy-button" class="button secondary">
+          テキストをコピー
+        </button>
+        <button id="save-button" class="button primary">
+          画像を保存
+        </button>
+      </div>
+      <p id="result-message" class="message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>UNOFFICIAL FAN CONTENT</p>
+    <p>画像・氏名等の権利は各権利者に帰属します。</p>
+  </footer>
+</body>
+</html>
