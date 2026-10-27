@@ -5,10 +5,10 @@
 // ==========================================
 
 // ★ 二択診断の比較回数。人数や好みに応じて変更
-const DUEL_ROUNDS = 36;
+const DUEL_ROUNDS = 150;
 
 // ★ 診断候補の人数。最低9人、登録人数以下に調整される
-const CANDIDATE_LIMIT = 20;
+const CANDIDATE_LIMIT = 9;
 
 const $ = (selector) => document.querySelector(selector);
 
