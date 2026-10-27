@@ -1,16 +1,21 @@
 
-// ==========================================
-// 好き顔9選メーカー：メイン処理
-// ★ 選択・診断・順位・保存機能はこのファイルで管理
-// ==========================================
+/* ==========================================
+   好き顔9選メーカー：メイン処理
+   四択 → 三択 → 二択を合計100回
+   ========================================== */
 
-// ★ 二択診断の比較回数。人数や好みに応じて変更
-const DUEL_ROUNDS = 150;
+// ★ ここを変更すると出題回数を調整できる
+const TOTAL_ROUNDS = 100;
+const ROUND_COUNTS = [
+  { size: 4, count: 34 },
+  { size: 3, count: 33 },
+  { size: 2, count: 33 }
+];
 
-// ★ 診断候補の人数。最低9人、登録人数以下に調整される
+// ★ 最終候補人数（9人を選ぶため最低9人必要）
 const CANDIDATE_LIMIT = 9;
 
-const $ = (selector) => document.querySelector(selector);
+const $ = selector => document.querySelector(selector);
 
 const listMode = $("#list-mode");
 const duelMode = $("#duel-mode");
@@ -40,18 +45,16 @@ const duelFinishButton = $("#duel-finish-button");
 const saveButton = $("#save-button");
 const copyButton = $("#copy-button");
 
-// 現在のモード
 let currentMode = "list";
-
-// 最終結果の並び順（先頭が1位）
+let resultSourceMode = "list";
 let selectedMembers = [];
 
-// 診断の候補とポイント
 let candidateMembers = [];
-let duelScores = new Map();
+let choiceCounts = new Map();
+let appearanceCounts = new Map();
+let roundPlan = [];
 let duelQueue = [];
 let duelIndex = 0;
-let duelWinnerHistory = [];
 
 // ==========================================
 // 共通関数
@@ -68,17 +71,11 @@ function shuffle(array) {
   return result;
 }
 
-function getMember(id) {
-  return MEMBERS.find(member => member.id === id);
-}
-
-function createImage(member, className = "") {
+function createImage(member) {
   const img = document.createElement("img");
   img.src = member.image;
   img.alt = member.name;
   img.loading = "lazy";
-
-  if (className) img.className = className;
 
   img.addEventListener("error", () => {
     img.removeAttribute("src");
@@ -114,18 +111,6 @@ function showMode(mode) {
     button.classList.toggle("active", active);
     button.setAttribute("aria-pressed", String(active));
   });
-
-  // 結果画面ではどちらの作成方法からでも結果を確認できる
-  if (mode === "candidate" || mode === "result") {
-    document.querySelectorAll(".mode-button").forEach(button => {
-      button.classList.toggle(
-        "active",
-        button.dataset.mode === "duel"
-          ? currentMode === "candidate"
-          : currentMode === "result"
-      );
-    });
-  }
 }
 
 document.querySelectorAll(".mode-button").forEach(button => {
@@ -135,12 +120,8 @@ document.querySelectorAll(".mode-button").forEach(button => {
       renderMembers();
     } else {
       showMode("duel");
-
-      if (duelQueue.length === 0) {
-        startDuel();
-      } else {
-        renderDuel();
-      }
+      if (duelQueue.length === 0) startDuel();
+      else renderDuel();
     }
   });
 });
@@ -155,6 +136,10 @@ function setupGroupFilter() {
   ].sort((a, b) => a.localeCompare(b, "ja"));
 
   groups.forEach(group => {
+    if ([...groupFilter.options].some(option => option.value === group)) {
+      return;
+    }
+
     const option = document.createElement("option");
     option.value = group;
     option.textContent = group;
@@ -167,7 +152,9 @@ function getVisibleMembers() {
   const query = memberSearch.value.trim().toLowerCase();
 
   return MEMBERS.filter(member => {
-    const matchesGroup = group === "all" || member.group === group;
+    const matchesGroup =
+      group === "all" || group === "" || member.group === group;
+
     const matchesName =
       member.name.toLowerCase().includes(query) ||
       member.group.toLowerCase().includes(query);
@@ -177,7 +164,7 @@ function getVisibleMembers() {
 }
 
 // ==========================================
-// 一覧選択モード
+// 一覧から9人を選ぶモード
 // ==========================================
 
 function createMemberCard(member, selectedList, onToggle) {
@@ -191,7 +178,6 @@ function createMemberCard(member, selectedList, onToggle) {
 
   button.classList.toggle("is-selected", isSelected);
   button.setAttribute("aria-pressed", String(isSelected));
-
   button.appendChild(createImage(member));
 
   const info = document.createElement("div");
@@ -211,14 +197,10 @@ function createMemberCard(member, selectedList, onToggle) {
   const rank = document.createElement("span");
   rank.className = "member-rank";
   rank.hidden = !isSelected;
-
-  if (isSelected) {
-    rank.textContent = index + 1;
-  }
-
+  if (isSelected) rank.textContent = index + 1;
   button.appendChild(rank);
-  button.addEventListener("click", () => onToggle(member));
 
+  button.addEventListener("click", () => onToggle(member));
   return button;
 }
 
@@ -243,8 +225,7 @@ function toggleListMember(member) {
     listMessage.textContent = `${member.name}を選択解除しました。`;
   } else {
     if (selectedMembers.length >= 9) {
-      listMessage.textContent =
-        "9人選択済みです。解除してから別の人を選んでね。";
+      listMessage.textContent = "9人選択済みです。解除してから選んでね。";
       return;
     }
 
@@ -266,38 +247,42 @@ groupFilter.addEventListener("change", renderMembers);
 memberSearch.addEventListener("input", renderMembers);
 
 // ==========================================
-// 二択診断
+// 四択 → 三択 → 二択の100回診断
 // ==========================================
 
+function buildRoundPlan() {
+  const plan = [];
+
+  ROUND_COUNTS.forEach(({ size, count }) => {
+    for (let i = 0; i < count; i++) {
+      plan.push(size);
+    }
+  });
+
+  // 回数設定を変更しても、合計をTOTAL_ROUNDSに合わせる
+  while (plan.length < TOTAL_ROUNDS) plan.push(2);
+
+  return shuffle(plan.slice(0, TOTAL_ROUNDS));
+}
+
 function startDuel() {
-  if (MEMBERS.length < 9) {
+  if (!Array.isArray(MEMBERS) || MEMBERS.length < 9) {
     duelMessage.textContent =
       "診断には最低9人の登録が必要です。members.jsを確認してね。";
     duelFinishButton.disabled = true;
     return;
   }
 
-  duelScores = new Map(MEMBERS.map(member => [member.id, 0]));
-  duelWinnerHistory = [];
+  choiceCounts = new Map(MEMBERS.map(member => [member.id, 0]));
+  appearanceCounts = new Map(MEMBERS.map(member => [member.id, 0]));
+
   duelIndex = 0;
+  roundPlan = buildRoundPlan();
+  duelQueue = [...roundPlan];
 
-  // 全メンバーから異なる2人のペアを作る
-  const pairs = [];
-
-  for (let i = 0; i < MEMBERS.length; i++) {
-    for (let j = i + 1; j < MEMBERS.length; j++) {
-      pairs.push([MEMBERS[i], MEMBERS[j]]);
-    }
-  }
-
-  duelQueue = shuffle(pairs).slice(
-    0,
-    Math.min(DUEL_ROUNDS, pairs.length)
-  );
-
-  duelFinishButton.disabled = false;
+  duelFinishButton.disabled = true;
   duelMessage.textContent =
-    "好きな方を選ぶと、その人に1ポイント加算されます。";
+    "表示された中から、いちばん好きな人を1人選んでね。";
 
   renderDuel();
 }
@@ -308,26 +293,40 @@ function renderDuel() {
   const total = duelQueue.length;
   const percent = total ? (duelIndex / total) * 100 : 0;
 
-  duelProgressText.textContent = `比較 ${duelIndex} / ${total}`;
+  duelProgressText.textContent = `選択 ${duelIndex} / ${total}`;
   duelProgressBar.style.width = `${percent}%`;
 
   if (duelIndex >= total) {
-    duelCards.textContent = "比較が完了しました！";
+    duelCards.textContent = "100回の選択が完了しました！";
     duelMessage.textContent =
-      "候補を確定して、好き顔9選を作成しよう。";
+      "「候補を確定」を押して、好き顔9選を作成しよう。";
     duelFinishButton.disabled = false;
     return;
   }
 
   duelFinishButton.disabled = true;
 
-  const [first, second] = duelQueue[duelIndex];
+  const size = duelQueue[duelIndex];
+  const label = size === 4 ? "四択" : size === 3 ? "三択" : "二択";
 
-  [first, second].forEach(member => {
+  duelMessage.textContent =
+    `第${duelIndex + 1}回：${label} — 好きな人を1人選んでね。`;
+
+  // 同じ回の中では同じ人を重複表示しない
+  const roundMembers = shuffle(MEMBERS).slice(
+    0,
+    Math.min(size, MEMBERS.length)
+  );
+
+  roundMembers.forEach(member => {
+    appearanceCounts.set(
+      member.id,
+      (appearanceCounts.get(member.id) || 0) + 1
+    );
+
     const button = document.createElement("button");
     button.type = "button";
     button.className = "duel-card";
-
     button.appendChild(createImage(member));
 
     const name = document.createElement("strong");
@@ -344,36 +343,46 @@ function renderDuel() {
 }
 
 function chooseDuelWinner(member) {
-  duelScores.set(
+  choiceCounts.set(
     member.id,
-    (duelScores.get(member.id) || 0) + 1
+    (choiceCounts.get(member.id) || 0) + 1
   );
 
-  duelWinnerHistory.push(member.id);
   duelIndex++;
   renderDuel();
 }
 
-$("#duel-restart-button").addEventListener("click", startDuel);
+$("#duel-restart-button").addEventListener("click", () => {
+  if (
+    duelIndex === 0 ||
+    duelIndex >= duelQueue.length ||
+    window.confirm("最初からやり直す？ 今までの選択結果はリセットされます。")
+  ) {
+    startDuel();
+  }
+});
 
 // ==========================================
-// 診断候補の確定
+// 診断結果から9人を候補にする
 // ==========================================
 
 function finishDuel() {
-  if (MEMBERS.length < 9) return;
+  if (MEMBERS.length < 9 || duelIndex < duelQueue.length) return;
 
   const ranked = [...MEMBERS].sort((a, b) => {
-    const scoreDifference =
-      (duelScores.get(b.id) || 0) - (duelScores.get(a.id) || 0);
+    const countA = choiceCounts.get(a.id) || 0;
+    const countB = choiceCounts.get(b.id) || 0;
 
-    if (scoreDifference !== 0) return scoreDifference;
+    if (countA !== countB) return countB - countA;
 
-    // 同点の場合は比較で勝った回数が多い人を優先
-    const winsA = duelWinnerHistory.filter(id => id === a.id).length;
-    const winsB = duelWinnerHistory.filter(id => id === b.id).length;
+    // 同点の場合は、表示回数に対する選択率を比較
+    const rateA = countA / Math.max(1, appearanceCounts.get(a.id) || 0);
+    const rateB = countB / Math.max(1, appearanceCounts.get(b.id) || 0);
 
-    return winsB - winsA;
+    if (rateA !== rateB) return rateB - rateA;
+
+    return (appearanceCounts.get(b.id) || 0) -
+      (appearanceCounts.get(a.id) || 0);
   });
 
   const limit = Math.min(
@@ -382,8 +391,6 @@ function finishDuel() {
   );
 
   candidateMembers = ranked.slice(0, limit);
-
-  // 診断でポイントが高かった上位9人を初期選択
   selectedMembers = candidateMembers.slice(0, 9);
 
   renderCandidates();
@@ -443,13 +450,11 @@ function renderResult() {
 
     const photo = document.createElement("div");
     photo.className = "result-photo";
-
     photo.appendChild(createImage(member));
 
     const rank = document.createElement("span");
     rank.className = "result-rank";
     rank.textContent = `${index + 1}位`;
-
     photo.appendChild(rank);
 
     const name = document.createElement("div");
@@ -463,17 +468,8 @@ function renderResult() {
     const controls = document.createElement("div");
     controls.className = "rank-controls";
 
-    const upButton = makeButton(
-      "↑",
-      "rank-button",
-      () => moveRank(index, -1)
-    );
-
-    const downButton = makeButton(
-      "↓",
-      "rank-button",
-      () => moveRank(index, 1)
-    );
+    const upButton = makeButton("↑", "rank-button", () => moveRank(index, -1));
+    const downButton = makeButton("↓", "rank-button", () => moveRank(index, 1));
 
     upButton.disabled = index === 0;
     downButton.disabled = index === selectedMembers.length - 1;
@@ -483,7 +479,6 @@ function renderResult() {
 
     controls.append(upButton, downButton);
     card.append(photo, name, group, controls);
-
     resultGrid.appendChild(card);
   });
 }
@@ -502,9 +497,10 @@ function moveRank(index, direction) {
 function showResult() {
   if (selectedMembers.length !== 9) return;
 
+  if (currentMode !== "result") resultSourceMode = currentMode;
+
   renderResult();
   resultSubtitle.textContent = "My favorite faces";
-
   showMode("result");
 
   resultSection.scrollIntoView({
@@ -517,7 +513,7 @@ listResultButton.addEventListener("click", showResult);
 candidateResultButton.addEventListener("click", showResult);
 
 $("#edit-result-button").addEventListener("click", () => {
-  if (currentMode === "result" && candidateMembers.length > 0) {
+  if (resultSourceMode === "candidate" && candidateMembers.length > 0) {
     renderCandidates();
     showMode("candidate");
   } else {
@@ -531,15 +527,10 @@ $("#edit-result-button").addEventListener("click", () => {
 // ==========================================
 
 function makeResultText() {
-  const lines = [
-    "わたしの好き顔9選",
-    ""
-  ];
+  const lines = ["わたしの好き顔9選", ""];
 
   selectedMembers.forEach((member, index) => {
-    lines.push(
-      `${index + 1}位：${member.name}（${member.group}）`
-    );
+    lines.push(`${index + 1}位：${member.name}（${member.group}）`);
   });
 
   return lines.join("\n");
@@ -550,7 +541,6 @@ copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(makeResultText());
     resultMessage.textContent = "順位付きテキストをコピーしました！";
   } catch (error) {
-    // HTTPSでない環境などで失敗する場合
     const textarea = document.createElement("textarea");
     textarea.value = makeResultText();
     textarea.style.position = "fixed";
@@ -585,7 +575,6 @@ saveButton.addEventListener("click", async () => {
   saveButton.textContent = "作成中…";
 
   try {
-    // 順位調整ボタンは画像に含めない
     document.body.classList.add("is-capturing");
 
     const canvas = await html2canvas(capture, {
