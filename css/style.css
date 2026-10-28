@@ -1,38 +1,17 @@
-
 /* ==========================================
    好き顔9選メーカー：デザイン
-   ★ 色・角丸・文字を変えるときは最初の設定欄を編集
    ========================================== */
 
 :root {
-  /* ★ ページ全体の背景 */
   --bg-color: #fff8fb;
-
-  /* ★ パネルやカードの背景 */
   --panel-color: #ffffff;
-
-  /* ★ 推しカラー：ボタン、選択枠など */
   --main-color: #e88eae;
-
-  /* ★ 濃い推しカラー：順位バッジ、強調表示 */
   --accent-color: #c85d86;
-
-  /* ★ 文字色 */
   --text-color: #4a3c43;
-
-  /* ★ 補助文字色 */
   --sub-text-color: #897b83;
-
-  /* ★ 枠線 */
   --border-color: #f0dce5;
-
-  /* ★ 選択中のカード背景 */
   --selected-color: #fff0f5;
-
-  /* ★ カードの角丸 */
   --card-radius: 14px;
-
-  /* ★ パネルの角丸 */
   --panel-radius: 20px;
 }
 
@@ -101,34 +80,6 @@ select:focus-visible {
   margin: 0 auto 48px;
 }
 
-/* モード切替 */
-.mode-switch {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 16px;
-  padding: 6px;
-  border: 1px solid var(--border-color);
-  border-radius: 999px;
-  background: var(--panel-color);
-}
-
-.mode-button {
-  min-height: 44px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--sub-text-color);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.mode-button.active {
-  background: var(--main-color);
-  color: white;
-}
-
 /* パネル */
 .panel {
   padding: 20px;
@@ -140,45 +91,14 @@ select:focus-visible {
 .panel h2 {
   margin: 0 0 12px;
   font-size: 21px;
-}
-
-.section-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-#selection-count {
-  color: var(--accent-color);
-  font-size: 13px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-label {
-  display: block;
-  margin: 16px 0 6px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-select,
-input[type="search"] {
-  display: block;
-  width: 100%;
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  background: var(--panel-color);
-  color: var(--text-color);
+  text-align: center;
 }
 
 .subtext,
 .message {
   color: var(--sub-text-color);
   font-size: 13px;
+  text-align: center;
 }
 
 .message {
@@ -186,82 +106,51 @@ input[type="search"] {
   overflow-wrap: anywhere;
 }
 
-/* メンバー一覧 */
-.member-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 9px;
-  margin-top: 18px;
+/* スタート画面 */
+.start-panel {
+  text-align: center;
 }
 
-.member-card {
-  position: relative;
-  min-width: 0;
-  overflow: hidden;
-  padding: 0;
-  border: 2px solid transparent;
-  border-radius: var(--card-radius);
-  background: var(--panel-color);
-  color: var(--text-color);
-  text-align: left;
-  cursor: pointer;
-}
-
-.member-card img {
-  display: block;
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+.start-rules {
+  margin: 24px 0;
+  padding: 16px;
   background: var(--bg-color);
+  border-radius: var(--card-radius);
+  text-align: left;
+  font-size: 13px;
+  color: var(--text-color);
 }
 
-.member-card.is-selected {
-  border-color: var(--main-color);
-  background: var(--selected-color);
+.start-rules p {
+  margin: 0 0 8px;
+  font-weight: bold;
+  color: var(--accent-color);
 }
 
-.member-info {
-  padding: 7px;
+.start-rules ul {
+  margin: 0;
+  padding-left: 20px;
 }
 
-.member-name,
-.member-group {
-  display: block;
-  overflow-wrap: anywhere;
+.start-rules li {
+  margin-bottom: 4px;
 }
 
-.member-name {
-  font-size: 12px;
-  font-weight: 800;
+.start-btn {
+  font-size: 16px;
+  padding: 14px 40px;
 }
 
-.member-group {
-  margin-top: 2px;
-  color: var(--sub-text-color);
-  font-size: 10px;
-}
-
-.member-rank {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  display: grid;
-  place-items: center;
-  width: 27px;
-  height: 27px;
-  border-radius: 50%;
-  background: var(--accent-color);
-  color: white;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-/* ボタン */
+/* ボタン共通 */
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 9px;
   margin-top: 20px;
+}
+
+.button-row.center {
+  justify-content: center;
 }
 
 .button {
@@ -292,7 +181,7 @@ input[type="search"] {
   cursor: not-allowed;
 }
 
-/* 二択診断 */
+/* 選択（診断）画面 */
 .duel-progress {
   margin: 18px 0;
 }
@@ -300,6 +189,8 @@ input[type="search"] {
 #duel-progress-text {
   font-size: 12px;
   color: var(--sub-text-color);
+  display: block;
+  text-align: center;
 }
 
 .progress-track {
@@ -335,10 +226,11 @@ input[type="search"] {
   cursor: pointer;
 }
 
+/* ★ 選択画面の画像を正方形 (1/1) に変更 */
 .duel-card img {
   display: block;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 1 / 1;
   object-fit: cover;
   background: var(--bg-color);
 }
@@ -348,6 +240,7 @@ input[type="search"] {
   display: block;
   padding: 0 8px;
   overflow-wrap: anywhere;
+  text-align: center;
 }
 
 .duel-card strong {
@@ -361,8 +254,7 @@ input[type="search"] {
   font-size: 11px;
 }
 
-.duel-card:hover,
-.member-card:hover {
+.duel-card:hover {
   filter: brightness(0.98);
 }
 
@@ -398,6 +290,7 @@ input[type="search"] {
   border: 1px solid var(--border-color);
   border-radius: 9px;
   background: var(--panel-color);
+  padding-bottom: 6px;
 }
 
 .result-photo {
@@ -433,7 +326,7 @@ input[type="search"] {
 }
 
 .result-group {
-  padding: 0 3px 6px;
+  padding: 0 3px;
   overflow-wrap: anywhere;
   color: var(--sub-text-color);
   text-align: center;
@@ -455,19 +348,10 @@ input[type="search"] {
   font-size: 10px;
 }
 
-/* PCでは一覧を5列に */
+/* レスポンシブ */
 @media (min-width: 700px) {
   .panel {
     padding: 30px;
-  }
-
-  .member-list {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .member-name {
-    font-size: 14px;
   }
 
   .result-grid {
@@ -479,22 +363,9 @@ input[type="search"] {
   }
 }
 
-/* 小さいスマートフォン */
 @media (max-width: 360px) {
   .panel {
     padding: 14px;
-  }
-
-  .member-list {
-    gap: 6px;
-  }
-
-  .member-info {
-    padding: 5px;
-  }
-
-  .member-name {
-    font-size: 11px;
   }
 
   .button {
