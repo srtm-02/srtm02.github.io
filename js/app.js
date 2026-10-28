@@ -1,13 +1,14 @@
 /* ==========================================
-   ワートリ好き顔メーカー
+   ワートリ好き顔メーカー (精度向上・全登場優先＆勝率重視版)
    ========================================== */
 
-const TOTAL_ROUNDS = 100;
+// 回数を150回に設定
+const TOTAL_ROUNDS = 150;
 
 const ROUND_COUNTS = [
-  { size: 4, count: 34 },
-  { size: 3, count: 33 },
-  { size: 2, count: 33 }
+  { size: 4, count: 50 },
+  { size: 3, count: 50 },
+  { size: 2, count: 50 }
 ];
 
 const $ = selector => document.querySelector(selector);
@@ -126,36 +127,50 @@ function startDuel() {
 startButton.addEventListener("click", startDuel);
 
 // ==========================================
-// 選択肢を抽選（登場回数が少ないメンバーを優先）
+// 選択肢を抽選
+// ★ 未登場者を最優先しつつ、選ばれた人の再登場率を底上げ
 // ==========================================
 
 function getRoundMembers(size) {
   const randomized = shuffle(MEMBERS);
 
   randomized.sort((a, b) => {
-    const countA = appearanceCounts.get(a.id) || 0;
-    const countB = appearanceCounts.get(b.id) || 0;
-    return countA - countB;
+    const appA = appearanceCounts.get(a.id) || 0;
+    const appB = appearanceCounts.get(b.id) || 0;
+
+    // 1. 未登場（登場回数0）のメンバーを最優先して選出
+    if (appA === 0 && appB !== 0) return -1;
+    if (appA !== 0 && appB === 0) return 1;
+
+    // 2. 全員が1回以上出た後は、選ばれた回数（勝ち数）が多いメンバーを優先しつつ
+    //    登場回数が多すぎるメンバーは適度に調整
+    const winA = choiceCounts.get(a.id) || 0;
+    const winB = choiceCounts.get(b.id) || 0;
+
+    const scoreA = winA * 3 - appA * 0.8;
+    const scoreB = winB * 3 - appB * 0.8;
+
+    return scoreB - scoreA;
   });
 
   return randomized.slice(0, Math.min(size, MEMBERS.length));
 }
 
 // ==========================================
-// 診断画面を表示
+// 診断画面を表示（進捗はパーセント表記）
 // ==========================================
 
 function renderDuel() {
   duelCards.replaceChildren();
 
   const total = roundPlan.length;
-  const percent = total > 0 ? (duelIndex / total) * 100 : 0;
+  const percent = total > 0 ? Math.floor((duelIndex / total) * 100) : 0;
 
-  duelProgressText.textContent = `選択 ${duelIndex} / ${TOTAL_ROUNDS}`;
+  duelProgressText.textContent = `選択 ${percent}%`;
   duelProgressBar.style.width = `${percent}%`;
 
   if (duelIndex >= total) {
-    duelCards.textContent = "100回の選択が完了しました！";
+    duelCards.textContent = "すべての選択が完了しました！";
     duelMessage.textContent = "お疲れさま！「結果を見る」を押して、上位9人を確認しよう。";
     duelFinishButton.disabled = false;
     return;
@@ -232,7 +247,7 @@ restartFromResultButton.addEventListener("click", () => {
 });
 
 // ==========================================
-// ポイント上位9人を自動選出
+// 勝率と獲得ポイントを基準に正確なTOP9を選出
 // ==========================================
 
 function finishDuel() {
@@ -245,24 +260,27 @@ function finishDuel() {
   }
 
   const ranked = [...MEMBERS].sort((a, b) => {
-    const countA = choiceCounts.get(a.id) || 0;
-    const countB = choiceCounts.get(b.id) || 0;
+    const winA = choiceCounts.get(a.id) || 0;
+    const winB = choiceCounts.get(b.id) || 0;
 
-    if (countA !== countB) {
-      return countB - countA;
+    const appA = appearanceCounts.get(a.id) || 0;
+    const appB = appearanceCounts.get(b.id) || 0;
+
+    const winRateA = appA > 0 ? winA / appA : 0;
+    const winRateB = appB > 0 ? winB / appB : 0;
+
+    // 1. 勝率（選ばれた割合）が高い方を優先
+    if (winRateA !== winRateB) {
+      return winRateB - winRateA;
     }
 
-    const appearancesA = appearanceCounts.get(a.id) || 0;
-    const appearancesB = appearanceCounts.get(b.id) || 0;
-
-    const rateA = countA / Math.max(1, appearancesA);
-    const rateB = countB / Math.max(1, appearancesB);
-
-    if (rateA !== rateB) {
-      return rateB - rateA;
+    // 2. 勝率が同じなら直接選ばれた勝利数（獲得ポイント）が多い方を優先
+    if (winA !== winB) {
+      return winB - winA;
     }
 
-    return appearancesB - appearancesA;
+    // 3. それでも同じなら登場回数が多い方を優先
+    return appB - appA;
   });
 
   selectedMembers = ranked.slice(0, 9);
@@ -272,7 +290,7 @@ function finishDuel() {
 duelFinishButton.addEventListener("click", finishDuel);
 
 // ==========================================
-// 結果画面を表示（順位変更コントロールは削除）
+// 結果画面を表示
 // ==========================================
 
 function renderResult() {
@@ -327,99 +345,4 @@ function scrollToCurrentSection() {
   });
 }
 
-// ==========================================
-// 結果テキストをコピー
-// ==========================================
-
-function makeResultText() {
-  const lines = [
-    "ワートリ好き顔メーカー",
-    "わたしの好き顔9選",
-    ""
-  ];
-
-  selectedMembers.forEach((member, index) => {
-    lines.push(`${index + 1}位：${member.name}（${member.group}）`);
-  });
-
-  return lines.join("\n");
-}
-
-copyButton.addEventListener("click", async () => {
-  const text = makeResultText();
-
-  try {
-    await navigator.clipboard.writeText(text);
-    resultMessage.textContent = "順位付きテキストをコピーしました！";
-  } catch (error) {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-
-    document.body.appendChild(textarea);
-    textarea.select();
-
-    const success = document.execCommand("copy");
-    textarea.remove();
-
-    resultMessage.textContent = success
-      ? "順位付きテキストをコピーしました！"
-      : "コピーできませんでした。ブラウザの権限を確認してね。";
-  }
-});
-
-// ==========================================
-// 結果画像を保存
-// ==========================================
-
-saveButton.addEventListener("click", async () => {
-  const capture = $("#result-capture");
-
-  if (typeof html2canvas !== "function") {
-    resultMessage.textContent = "画像保存ライブラリを読み込めませんでした。";
-    return;
-  }
-
-  saveButton.disabled = true;
-  saveButton.textContent = "作成中…";
-
-  try {
-    document.body.classList.add("is-capturing");
-
-    const images = [...capture.querySelectorAll("img")];
-
-    await Promise.all(
-      images.map(img => {
-        if (img.complete) return Promise.resolve();
-        return new Promise(resolve => {
-          img.addEventListener("load", resolve, { once: true });
-          img.addEventListener("error", resolve, { once: true });
-        });
-      })
-    );
-
-    const canvas = await html2canvas(capture, {
-      backgroundColor: getComputedStyle(capture).backgroundColor || "#ffffff",
-      scale: 2,
-      useCORS: true
-    });
-
-    const link = document.createElement("a");
-    link.download = "ワートリ好き顔メーカー.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-
-    resultMessage.textContent = "画像を保存しました！";
-  } catch (error) {
-    console.error(error);
-    resultMessage.textContent = "画像を保存できませんでした。画像の読み込みを確認してね。";
-  } finally {
-    document.body.classList.remove("is-capturing");
-    saveButton.disabled = false;
-    saveButton.textContent = "画像を保存";
-  }
-});
-
-// 初期画面設定
-showMode("start");
+// =
