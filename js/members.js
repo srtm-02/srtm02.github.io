@@ -114,8 +114,8 @@ const MEMBERS = [
   },
   {
     id: "person-019",
-    name: "ヒュース・クローニン",
-    group: "玉狛第2（三雲隊）",
+    name: "ヒュース",
+    group: "",
     image: "images/person-019.jpg"
   },
   {
@@ -255,5 +255,557 @@ const MEMBERS = [
     name: "綾辻 遥",
     group: "嵐山隊",
     image: "images/person-042.jpg"
+  },
+  {
+    id: "person-043",
+    name: "加古 望",
+    group: "加古隊",
+    image: "images/person-043.jpg"
+  },
+  {
+    id: "person-044",
+    name: "黒江 双葉",
+    group: "加古隊",
+    image: "images/person-044.jpg"
+  },
+  {
+    id: "person-045",
+    name: "喜多川 真衣",
+    group: "加古隊",
+    image: "images/person-045.jpg"
+  },
+  {
+    id: "person-046",
+    name: "小早川 杏",
+    group: "加古隊",
+    image: "images/person-046.jpg"
+  },
+  {
+    id: "person-047",
+    name: "三輪 秀次",
+    group: "三輪隊",
+    image: "images/person-047.jpg"
+  },
+  {
+    id: "person-048",
+    name: "米屋 陽介",
+    group: "三輪隊",
+    image: "images/person-048.jpg"
+  },
+  {
+    id: "person-049",
+    name: "奈良坂 透",
+    group: "三輪隊",
+    image: "images/person-049.jpg"
+  },
+  {
+    id: "person-050",
+    name: "古寺 章平",
+    group: "三輪隊",
+    image: "images/person-050.jpg"
+  },
+  {
+    id: "person-051",
+    name: "月見 蓮",
+    group: "三輪隊",
+    image: "images/person-051.jpg"
+  },
+  {
+    id: "person-052",
+    name: "片桐 隆明",
+    group: "片桐隊",
+    image: "images/person-052.jpg"
+  },
+  {
+    id: "person-053",
+    name: "一条 雪丸",
+    group: "片桐隊",
+    image: "images/person-053.jpg"
+  },
+  {
+    id: "person-054",
+    name: "桃園 藤一郎",
+    group: "片桐隊",
+    image: "images/person-054.jpg"
+  },
+  {
+    id: "person-055",
+    name: "尼倉 亜澄",
+    group: "片桐隊",
+    image: "images/person-055.jpg"
+  },
+  {
+    id: "person-056",
+    name: "結束 夏凛",
+    group: "片桐隊",
+    image: "images/person-056.jpg"
+  },
+  {
+    id: "person-057",
+    name: "二宮 匡貴",
+    group: "二宮隊",
+    image: "images/person-057.jpg"
+  },
+  {
+    id: "person-058",
+    name: "犬飼 澄晴",
+    group: "二宮隊",
+    image: "images/person-058.jpg"
+  },
+  {
+    id: "person-059",
+    name: "辻 新之助",
+    group: "二宮隊",
+    image: "images/person-059.jpg"
+  },
+  {
+    id: "person-060",
+    name: "氷見 亜希",
+    group: "二宮隊",
+    image: "images/person-060.jpg"
+  },
+  {
+    id: "person-061",
+    name: "鳩原 未来",
+    group: "",
+    image: "images/person-061.jpg"
+  },
+  {
+    id: "person-062",
+    name: "影浦 雅人",
+    group: "影浦隊",
+    image: "images/person-062.jpg"
+  },
+  {
+    id: "person-063",
+    name: "北添 尋",
+    group: "影浦隊",
+    image: "images/person-063.jpg"
+  },
+  {
+    id: "person-064",
+    name: "絵馬 ユズル",
+    group: "影浦隊",
+    image: "images/person-064.jpg"
+  },
+  {
+    id: "person-065",
+    name: "仁礼 光",
+    group: "影浦隊",
+    image: "images/person-065.jpg"
+  },
+  {
+    id: "person-066",
+    name: "生駒 達人",
+    group: "生駒隊",
+    image: "images/person-066.jpg"
+  },
+  {
+    id: "person-067",
+    name: "水上 敏志",
+    group: "生駒隊",
+    image: "images/person-067.jpg"
+  },
+  {
+    id: "person-068",
+    name: "隠岐 孝二",
+    group: "生駒隊",
+    image: "images/person-068.jpg"
+  },
+  {
+    id: "person-069",
+    name: "南沢 海",
+    group: "生駒隊",
+    image: "images/person-069.jpg"
+  },
+  {
+    id: "person-070",
+    name: "細井 真織",
+    group: "生駒隊",
+    image: "images/person-070.jpg"
+  },
+  {
+    id: "person-071",
+    name: "弓場 拓磨",
+    group: "弓場隊",
+    image: "images/person-071.jpg"
+  },
+  {
+    id: "person-072",
+    name: "帯島 ユカリ",
+    group: "弓場隊",
+    image: "images/person-072.jpg"
+  },
+  {
+    id: "person-073",
+    name: "外岡 一斗",
+    group: "弓場隊",
+    image: "images/person-073.jpg"
+  },
+  {
+    id: "person-074",
+    name: "藤丸 のの",
+    group: "弓場隊",
+    image: "images/person-074.jpg"
+  },
+  {
+    id: "person-075",
+    name: "神田 忠臣",
+    group: "",
+    image: "images/person-075.jpg"
+  },
+  {
+    id: "person-076",
+    name: "王子 一彰",
+    group: "王子隊",
+    image: "images/person-076.jpg"
+  },
+  {
+    id: "person-077",
+    name: "蔵内 和紀",
+    group: "王子隊",
+    image: "images/person-077.jpg"
+  },
+  {
+    id: "person-078",
+    name: "樫尾 由多嘉",
+    group: "王子隊",
+    image: "images/person-078.jpg"
+  },
+  {
+    id: "person-079",
+    name: "橘高 羽矢",
+    group: "王子隊",
+    image: "images/person-079.jpg"
+  },
+  {
+    id: "person-080",
+    name: "東 春秋",
+    group: "東隊",
+    image: "images/person-080.jpg"
+  },
+  {
+    id: "person-081",
+    name: "小荒井 登",
+    group: "東隊",
+    image: "images/person-081.jpg"
+  },
+  {
+    id: "person-082",
+    name: "奥寺 常幸",
+    group: "東隊",
+    image: "images/person-082.jpg"
+  },
+  {
+    id: "person-083",
+    name: "人見 摩子",
+    group: "東隊",
+    image: "images/person-083.jpg"
+  },
+  {
+    id: "person-084",
+    name: "香取 葉子",
+    group: "香取隊",
+    image: "images/person-084.jpg"
+  },
+  {
+    id: "person-085",
+    name: "三浦 雄太",
+    group: "香取隊",
+    image: "images/person-085.jpg"
+  },
+  {
+    id: "person-086",
+    name: "若村 麓郎",
+    group: "香取隊",
+    image: "images/person-086.jpg"
+  },
+  {
+    id: "person-087",
+    name: "染井 華",
+    group: "香取隊",
+    image: "images/person-087.jpg"
+  },
+  {
+    id: "person-088",
+    name: "来馬 辰也",
+    group: "鈴鳴第一（来馬隊）",
+    image: "images/person-088.jpg"
+  },
+  {
+    id: "person-089",
+    name: "村上 鋼",
+    group: "鈴鳴第一（来馬隊）",
+    image: "images/person-089.jpg"
+  },
+  {
+    id: "person-090",
+    name: "別役 太一",
+    group: "鈴鳴第一（来馬隊）",
+    image: "images/person-090.jpg"
+  },
+  {
+    id: "person-091",
+    name: "今 結花",
+    group: "鈴鳴第一（来馬隊）",
+    image: "images/person-091.jpg"
+  },
+  {
+    id: "person-092",
+    name: "漆間 恒",
+    group: "漆間隊",
+    image: "images/person-092.jpg"
+  },
+  {
+    id: "person-093",
+    name: "六田 梨香",
+    group: "漆間隊",
+    image: "images/person-093.jpg"
+  },
+  {
+    id: "person-094",
+    name: "諏訪 洸太郎",
+    group: "諏訪隊",
+    image: "images/person-094.jpg"
+  },
+  {
+    id: "person-095",
+    name: "堤 大地",
+    group: "諏訪隊",
+    image: "images/person-095.jpg"
+  },
+  {
+    id: "person-096",
+    name: "笹森 日佐人",
+    group: "諏訪隊",
+    image: "images/person-096.jpg"
+  },
+  {
+    id: "person-097",
+    name: "小佐野 瑠衣",
+    group: "諏訪隊",
+    image: "images/person-097.jpg"
+  },
+  {
+    id: "person-098",
+    name: "荒船 哲次",
+    group: "荒船隊",
+    image: "images/person-098.jpg"
+  },
+  {
+    id: "person-099",
+    name: "穂刈 篤",
+    group: "荒船隊",
+    image: "images/person-099.jpg"
+  },
+  {
+    id: "person-100",
+    name: "半崎 義人",
+    group: "荒船隊",
+    image: "images/person-100.jpg"
+  },
+  {
+    id: "person-101",
+    name: "加賀美 倫",
+    group: "荒船隊",
+    image: "images/person-101.jpg"
+  },
+  {
+    id: "person-102",
+    name: "那須 玲",
+    group: "那須隊",
+    image: "images/person-102.jpg"
+  },
+  {
+    id: "person-103",
+    name: "熊谷 友子",
+    group: "那須隊",
+    image: "images/person-103.jpg"
+  },
+  {
+    id: "person-104",
+    name: "日浦 茜",
+    group: "那須隊",
+    image: "images/person-104.jpg"
+  },
+  {
+    id: "person-105",
+    name: "志岐 小夜子",
+    group: "那須隊",
+    image: "images/person-105.jpg"
+  },
+  {
+    id: "person-106",
+    name: "柿崎 国治",
+    group: "柿崎隊",
+    image: "images/person-106.jpg"
+  },
+  {
+    id: "person-107",
+    name: "照屋 文香",
+    group: "柿崎隊",
+    image: "images/person-107.jpg"
+  },
+  {
+    id: "person-108",
+    name: "巴 虎太郎",
+    group: "柿崎隊",
+    image: "images/person-108.jpg"
+  },
+  {
+    id: "person-109",
+    name: "宇井 真登華",
+    group: "柿崎隊",
+    image: "images/person-109.jpg"
+  },
+  {
+    id: "person-110",
+    name: "武富 桜子",
+    group: "海老名隊",
+    image: "images/person-110.jpg"
+  },
+  {
+    id: "person-111",
+    name: "茶野 真",
+    group: "茶野隊",
+    image: "images/person-111.jpg"
+  },
+  {
+    id: "person-112",
+    name: "藤沢 樹",
+    group: "茶野隊",
+    image: "images/person-112.jpg"
+  },
+  {
+    id: "person-113",
+    name: "十倉 恵",
+    group: "茶野隊",
+    image: "images/person-113.jpg"
+  },
+  {
+    id: "person-114",
+    name: "夏目 出穂",
+    group: "C級隊員",
+    image: "images/person-114.jpg"
+  },
+  {
+    id: "person-115",
+    name: "空閑 有吾",
+    group: "",
+    image: "images/person-115.jpg"
+  },
+  {
+    id: "person-116",
+    name: "ライモンド",
+    group: "",
+    image: "images/person-116.jpg"
+  },
+  {
+    id: "person-117",
+    name: "イズカチャ",
+    group: "",
+    image: "images/person-117.jpg"
+  },
+  {
+    id: "person-118",
+    name: "ヴィッターノ",
+    group: "",
+    image: "images/person-118.jpg"
+  },
+  {
+    id: "person-119",
+    name: "最上 宗一",
+    group: "",
+    image: "images/person-119.jpg"
+  },
+  {
+    id: "person-120",
+    name: "雨取 麟児",
+    group: "",
+    image: "images/person-120.jpg"
+  },
+  {
+    id: "person-121",
+    name: "林藤 陽太郎",
+    group: "",
+    image: "images/person-121.jpg"
+  },
+  {
+    id: "person-122",
+    name: "三雲 香澄",
+    group: "",
+    image: "images/person-122.jpg"
+  },
+  {
+    id: "person-123",
+    name: "ハイレイン",
+    group: "",
+    image: "images/person-123.jpg"
+  },
+  {
+    id: "person-124",
+    name: "ヴィザ",
+    group: "",
+    image: "images/person-124.jpg"
+  },
+  {
+    id: "person-125",
+    name: "ミラ",
+    group: "",
+    image: "images/person-125.jpg"
+  },
+  {
+    id: "person-126",
+    name: "エネドラ",
+    group: "",
+    image: "images/person-126.jpg"
+  },
+  {
+    id: "person-127",
+    name: "ランバネイン",
+    group: "",
+    image: "images/person-127.jpg"
+  },
+  {
+    id: "person-128",
+    name: "ガトリン",
+    group: "",
+    image: "images/person-128.jpg"
+  },
+  {
+    id: "person-129",
+    name: "コスケロ",
+    group: "",
+    image: "images/person-129.jpg"
+  },
+  {
+    id: "person-130",
+    name: "ウェン・ソー",
+    group: "",
+    image: "images/person-130.jpg"
+  },
+  {
+    id: "person-131",
+    name: "ラタリコフ",
+    group: "",
+    image: "images/person-131.jpg"
+  },
+  {
+    id: "person-132",
+    name: "ヨミ",
+    group: "",
+    image: "images/person-132.jpg"
+  },
+  {
+    id: "person-133",
+    name: "レギンデッツ",
+    group: "",
+    image: "images/person-133.jpg"
+  },
+  {
+    id: "person-134",
+    name: "忍田 瑠花",
+    group: "",
+    image: "images/person-134.jpg"
   }
 ];
