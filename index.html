@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,12 +22,34 @@
   </header>
 
   <main class="container">
-    <section id="duel-mode" class="panel">
+    <!-- 1. トップページ（スタート画面） -->
+    <section id="start-section" class="panel start-panel">
       <h2>ワートリ好き顔メーカー</h2>
       <p class="subtext">
-        四択・三択・二択を合計100回！
+        表示される顔の中から好きな顔を選んでいくと、あなたの好きな顔TOP9が決定します！
+      </p>
+      
+      <div class="start-rules">
+        <p>【ルール】</p>
+        <ul>
+          <li>四択・三択・二択を合計100回選択します。</li>
+          <li>直感で一番好きな顔を1人ずつ選んでください。</li>
+          <li>選択ポイントを集計して上位9人を抽出します。</li>
+        </ul>
+      </div>
+
+      <div class="button-row center">
+        <button id="start-button" type="button" class="button primary start-btn">
+          スタートする
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. 選択（診断）画面 -->
+    <section id="duel-mode" class="panel" hidden>
+      <h2>ワートリ好き顔メーカー</h2>
+      <p class="subtext">
         直感で好きな人を1人ずつ選んでね。
-        選んだポイントを集計して、上位9人を決定するよ。
       </p>
 
       <div class="duel-progress">
@@ -62,6 +83,7 @@
       </div>
     </section>
 
+    <!-- 3. 結果画面 -->
     <section id="result-section" class="panel result-panel" hidden>
       <div id="result-capture">
         <p class="eyebrow">MY TOP 9</p>
@@ -75,11 +97,11 @@
 
       <div class="button-row">
         <button
-          id="edit-result-button"
+          id="restart-from-result-button"
           type="button"
           class="button secondary"
         >
-          診断結果に戻る
+          もう一度遊ぶ
         </button>
 
         <button
